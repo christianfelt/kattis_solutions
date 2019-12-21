@@ -34,7 +34,7 @@ def get_num_inversions(s):
         else:
             raise Exception("n - j is invalid value.")
         j -= 1
-    while j > 0:  # Now we can assume the rightmost digit is 1.
+    while j > -1:  # Now we can assume the rightmost digit is 1.
         j = index_of_rightmost_one(s, j)
         if j == -1:
             break
@@ -52,7 +52,7 @@ def get_num_inversions(s):
 def make_two_k_strings(s):
     two_k_strings = []
     k = s.count('?')
-    for i in range(2**k):
+    for i in range(2 ** k):
         this_perm = bin(i)[2:].zfill(k)  # Strip 0b prefix off binary number.
         this_s = s
         for j in range(k):
@@ -60,9 +60,15 @@ def make_two_k_strings(s):
         two_k_strings.append(this_s)
     return two_k_strings
 
-s = input()
-two_k_strings = make_two_k_strings(s)  # Here go all possible replacements of ? in s by 0 or 1
-total_num_inversions = 0
-for st in two_k_strings:
-    total_num_inversions += get_num_inversions(st)
-print(total_num_inversions)
+
+def main(s):
+    two_k_strings = make_two_k_strings(s)  # Here go all possible replacements of ? in s by 0 or 1
+    total_num_inversions = 0
+    for st in two_k_strings:
+        total_num_inversions += get_num_inversions(st)
+    return total_num_inversions
+
+
+if __name__ == '__main__':
+    s = input()
+    print(main(s))
