@@ -7,7 +7,7 @@ import time
 
 MODULUS = 1000000007
 known_chunks = {}
-NUM_CHUNKS = 100
+NUM_CHUNKS = 4
 
 
 def get_num_inversions(s):
