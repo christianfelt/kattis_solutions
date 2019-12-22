@@ -3,16 +3,12 @@ Christian Felt
 December 20, 2019
 Solves the Kattis problem "0-1 Sequences"
 """
-
-# TODO: Use Dynamic Programming more extensively
-# TODO: Find some way to do without make_two_k_strings or make it faster
-
 import time
 
 MODULUS = 1000000007
 known_sols = {}
 known_chunks = {}
-CHUNK_SIZE = 2
+NUM_CHUNKS = 100
 
 
 def get_num_inversions(s):
@@ -68,11 +64,11 @@ def make_two_k_strings(s):
     return two_k_strings
 
 
-def make_two_k_strings_with_chunking(s):
+def make_two_k_strings_with_chunks(s, chunk_size):
     two_k_strings = set()
-    remainder = s[len(s) - (len(s) % CHUNK_SIZE):]
-    for i in range(0, len(s) - CHUNK_SIZE + 1, CHUNK_SIZE):
-        chunk = s[i:i + CHUNK_SIZE]
+    remainder = s[len(s) - (len(s) % chunk_size):]
+    for i in range(0, len(s) - chunk_size + 1, chunk_size):
+        chunk = s[i:i + chunk_size]
         if chunk not in known_chunks:
             current_chunks = get_all_combs(chunk)
             known_chunks[chunk] = current_chunks
@@ -88,41 +84,46 @@ def make_two_k_strings_with_chunking(s):
     return two_k_strings
 
 
-def main(s):
-    if len(s) >= CHUNK_SIZE:
-        two_k_strings = make_two_k_strings_with_chunking(s)  # Here go all possible replacements of ? in s by 0 or 1
-    else:
-        two_k_strings = make_two_k_strings(s)
-    total_num_inversions = 0
-    for st in two_k_strings:
-        total_num_inversions += get_num_inversions(st)
-    return total_num_inversions % MODULUS
-
-
-def solve_without_chunks(s):
+def solve_without_chunks(s):  # Just for testing.
     start = time.time()
     two_k_strings = make_two_k_strings(s)
     total_num_inversions = 0
     for st in two_k_strings:
         total_num_inversions += get_num_inversions(st)
     end = time.time()
-    print("Execution time without chunking is", str(end - start))
+    print("Execution time without chunks is", str(end - start))
     return total_num_inversions % MODULUS
 
 
-def solve_with_chunks(s):
+def solve_with_chunks(s, chunk_size):  # Just for testing.
     start = time.time()
-    two_k_strings = make_two_k_strings_with_chunking(s)
+    two_k_strings = make_two_k_strings_with_chunks(s, chunk_size)
     total_num_inversions = 0
     for st in two_k_strings:
         total_num_inversions += get_num_inversions(st)
     end = time.time()
-    print("Execution time with chunking is", str(end - start))
+    print("Execution time with chunks is", str(end - start))
     return total_num_inversions % MODULUS
+
+
+def solve(s, chunk_size):
+    if chunk_size == 1:
+        two_k_strings = make_two_k_strings(s)
+    else:
+        two_k_strings = make_two_k_strings_with_chunks(s, chunk_size)
+    total_num_inversions = 0
+    for st in two_k_strings:
+        total_num_inversions += get_num_inversions(st)
+    return total_num_inversions % MODULUS
+
+
+def main(s):
+    chunk_size = max(int(len(s) / NUM_CHUNKS), 1)
+    return solve(s, chunk_size)
 
 
 if __name__ == '__main__':
     s = input()
-    print(solve_with_chunks(s))
-    print(solve_without_chunks(s))
-    # print(main(s))
+    # print(solve_with_chunks(s, 1))
+    # print(solve_without_chunks(s))
+    print(main(s))

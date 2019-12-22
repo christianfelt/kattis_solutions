@@ -28,7 +28,10 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(main("100101"), 4)
 
     def test_chunking(self):
-        self.assertEqual(solve_with_chunks("?????"), solve_without_chunks("?????"))
+        self.assertEqual(solve_with_chunks("?????", 4), solve_without_chunks("?????"))
+
+    def test_large_chunking(self):
+        self.assertEqual(main("????????????????????"), 49807360)
 
 
 if __name__ == '__main__':
