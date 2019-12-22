@@ -4,17 +4,27 @@ December 20, 2019
 Solves the Kattis problem "0-1 Sequences"
 """
 
+# TODO: Use Dynamic Programming more extensively
+# TODO: Find some way to do without make_two_k_strings or make it faster
+
 MODULUS = 1000000007
+known_sols = {}
+
 
 def get_num_inversions(s):
-    num_inversions = 0
-    num_zeros = s.count('0')
-    for char in s:
-        if char == '1':
-            num_inversions += num_zeros
-        if char == '0':
-            num_zeros -= 1
-    return num_inversions % MODULUS
+    if s in known_sols:
+        return known_sols[s]
+    else:
+        num_inversions = 0
+        num_zeros = s.count('0')
+        for char in s:
+            if char == '1':
+                num_inversions += num_zeros
+            if char == '0':
+                num_zeros -= 1
+        this_sol = num_inversions % MODULUS
+        known_sols[s] = this_sol
+        return this_sol
 
 
 def make_two_k_strings(s):

@@ -23,7 +23,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(main("10100"), 5)
         self.assertEqual(main("10000"), 4)
         self.assertEqual(main("?000?"), 7)
-        # self.assertEqual(main("?????"), 7)
 
     def test_six_digits(self):
         self.assertEqual(main("100101"), 4)
