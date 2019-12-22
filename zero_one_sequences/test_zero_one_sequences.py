@@ -1,5 +1,5 @@
 import unittest
-from zero_one_sequences import main
+from zero_one_sequences import main, solve_with_chunks, solve_without_chunks
 
 
 class MyTestCase(unittest.TestCase):
@@ -26,6 +26,9 @@ class MyTestCase(unittest.TestCase):
 
     def test_six_digits(self):
         self.assertEqual(main("100101"), 4)
+
+    def test_chunking(self):
+        self.assertEqual(solve_with_chunks("?????"), solve_without_chunks("?????"))
 
 
 if __name__ == '__main__':
