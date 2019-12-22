@@ -1,5 +1,5 @@
 import unittest
-from zero_one_sequences_beads import main
+from zero_one_sequences import main
 
 
 class MyTestCase(unittest.TestCase):
