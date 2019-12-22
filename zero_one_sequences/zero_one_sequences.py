@@ -30,6 +30,7 @@ def get_num_inversions(s):
         known_sols[s] = this_sol
         return this_sol
 
+
 def get_all_combs(chunk):
     current_chunks = []
     k = chunk.count('?')
@@ -40,6 +41,19 @@ def get_all_combs(chunk):
             this_chunk = this_chunk.replace('?', this_perm[j], 1)
         current_chunks.append(this_chunk)
     return current_chunks
+
+
+def add_new_combs_to_k_strings(two_k_strings, chunk):
+    strings_to_remove = set()
+    strings_to_add = set()
+    for stub_string in two_k_strings:
+        for element in known_chunks[chunk]:
+            strings_to_add.add(stub_string + element)
+        strings_to_remove.add(stub_string)
+    for string_to_remove in strings_to_remove:
+        two_k_strings.remove(string_to_remove)
+    for string_to_add in strings_to_add:
+        two_k_strings.add(string_to_add)
 
 
 def make_two_k_strings(s):
@@ -66,29 +80,11 @@ def make_two_k_strings_with_chunking(s):
             for element in known_chunks[chunk]:
                 two_k_strings.add(element)
         else:
-            strings_to_remove = set()
-            strings_to_add = set()
-            for stub_string in two_k_strings:
-                for element in known_chunks[chunk]:
-                    strings_to_add.add(stub_string + element)
-                strings_to_remove.add(stub_string)
-            for string_to_remove in strings_to_remove:
-                two_k_strings.remove(string_to_remove)
-            for string_to_add in strings_to_add:
-                two_k_strings.add(string_to_add)
+            add_new_combs_to_k_strings(two_k_strings, chunk)
     if remainder not in known_chunks:
         remainder_chunks = get_all_combs(remainder)
         known_chunks[remainder] = remainder_chunks
-    strings_to_remove = set()
-    strings_to_add = set()
-    for stub_string in two_k_strings:
-        for element in known_chunks[remainder]:
-            strings_to_add.add(stub_string + element)
-        strings_to_remove.add(stub_string)
-    for string_to_remove in strings_to_remove:
-        two_k_strings.remove(string_to_remove)
-    for string_to_add in strings_to_add:
-        two_k_strings.add(string_to_add)
+    add_new_combs_to_k_strings(two_k_strings, remainder)
     return two_k_strings
 
 
