@@ -63,25 +63,26 @@ class Log:
         """Do everything with ants on a log that happens in one second."""
         ants_to_remove = set()
         midturn_ants = set()
-        for ant1 in self.ants:
+        for ant1 in self.ants:  # First deal with collisions that will occur at time = 0.5 sec
             for ant2 in self.ants:
                 if ant1 != ant2:
                     col1, col2 = self.detect_midturn_collision(ant1, ant2)
                     if col1 is not None:
                         midturn_ants.add(col1)
                         midturn_ants.add(col2)
-        for ant1 in self.ants:
+        for ant1 in self.ants:  # Now deal with the rest of the ants, who will move a full step and maybe fall off.
             if ant1 not in midturn_ants:  # The midturn ants have already moved; they were the only ones that might
                 # experience a collision in the middle, rather than at the end of a turn.
                 ant1.location += ant1.direction  # Any collisions that occur here will be dealt with at end of turn.
                 if ant1.location == 0 or ant1.location == self.length:
                     ant1.has_fallen = True
                     ants_to_remove.add(ant1)
-        for ant1 in self.ants:
+        for ant1 in self.ants:  # Now deal with the fact that some ants may now be on the same position, and experience
+            # a collision whose effects will be felt during the next turn (i.e. their directions will be reversed).
             for ant2 in self.ants:
                 if ant1 != ant2:
                     self.detect_endturn_collision(ant1, ant2)
-        for ant in ants_to_remove:
+        for ant in ants_to_remove:  # Remove all ants that fell off the log during this turn.
             self.ants.remove(ant)
 
 
@@ -99,10 +100,13 @@ def test():
 
 def main():
     """Solve the Kattis Ants problem."""
+    # I'm assuming no ants start on endpoints of the log, and all ants start at different points.
     num_cases = int(input())
     for i in range(num_cases):
         length, n = map(int, input().split())
         positions = list(map(int, input().split()))
+        while len(positions) != n:  # Positions input may come on multiple lines.
+            positions.extend(list(map(int, input().split())))
         directions_permutations = []
         for j in range(2 ** n):
             this_directions_permutation = bin(j)[2:].zfill(n)
