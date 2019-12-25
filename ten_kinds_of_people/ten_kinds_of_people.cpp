@@ -1,4 +1,14 @@
+/*
+Christian Felt
+December 2019
+Solves the 10 Kinds of People Problem on Kattis.
+Solution strategy: Fill adjacent locations that have the same character with the fill character, 
+similarly to in a paint program, starting from the initial point and see if fill character
+reaches the destination point.
+*/
+
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -59,28 +69,20 @@ int main(int argc, char *argv[]) {
 	cin >> r;
 	int c;
 	cin >> c;
-	int** board = new int*[r];
+	int** board = new int*[r];  // This is our only use of dynamic memory
+	// and it may as well last as long as the program, so no destructor needed.
 	for(int i = 0; i < r; i++){
 		board[i] = new int[c];
 	}
+	cin.ignore();  // Ingnore the newline character after the previous input.
 	for(int i = 0; i < r; i++){
-		int this_int;
-		cin >> this_int;
-		int m = 0;
-		for (int j = c - 1; j > -1; j--){
-			int this_entry;
-			if (m == 0){
-				this_entry = this_int % 10;
-				m = 1;
-			}
-			else{
-				this_entry = (this_int / (10 * m)) % 10;
-				m *= 10;
-			}
+		string this_line;
+		getline(cin, this_line);
+		for (string::size_type j = 0; j < this_line.size(); j++){
+			int this_entry = (int)(this_line[j]) - 48;
 			board[i][j] = this_entry;
 		}
 	}
-//	print_board(board, r, c);
 	int n;
 	cin >> n;
 	for (int i = 0; i < n; i++){
