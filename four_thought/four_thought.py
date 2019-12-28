@@ -4,7 +4,7 @@ December 2019
 Solves the Kattis problem "4 Thought"
 """
 
-OPS = {"+", "-", "*", "/"}
+OPS = {"+", "-", "*", "//"}
 
 
 def solve(n):
@@ -13,7 +13,7 @@ def solve(n):
             for op2 in OPS:
                 this_sol_str = "4 " + op0 + " 4 " + op1 + " 4 " + op2 + " 4"
                 if eval(this_sol_str) == n:
-                    return this_sol_str + " = " + str(n)
+                    return this_sol_str.replace("//", "/") + " = " + str(n)
     return "no solution"
 
 
